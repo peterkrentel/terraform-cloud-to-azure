@@ -115,6 +115,9 @@ resource "azurerm_managed_disk" "data_disk" {
   storage_account_type = "Standard_LRS"
   create_option        = "Empty"
   disk_size_gb         = 16
+  depends_on = [
+    azurerm_resource_group.app_grp
+  ]
 }
 # Then we need to attach the data disk to the Azure virtual machine
 resource "azurerm_virtual_machine_data_disk_attachment" "disk_attach" {
@@ -146,6 +149,9 @@ resource "azurerm_storage_account" "appstore" {
   account_tier             = "Standard"
   account_replication_type = "LRS"
   #allow_blob_public_access = true
+  depends_on = [
+    azurerm_resource_group.app_grp
+  ]
 }
 
 resource "azurerm_storage_container" "data" {
@@ -203,6 +209,9 @@ resource "azurerm_network_security_group" "app_nsg" {
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
+  depends_on = [
+    azurerm_resource_group.app_grp
+  ]
 }
 
 resource "azurerm_subnet_network_security_group_association" "nsg_association" {
